@@ -1,0 +1,1220 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prenotazione Chromebook - Scuola Primaria Mazzini</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        school: {
+                            yellow: '#FEF08A',
+                            orange: '#FFEDD5',
+                            blue: '#E0F2FE',
+                            indigo: '#E0E7FF',
+                            green: '#DCFCE7',
+                            pink: '#FCE7F3',
+                            brand: '#3B82F6',
+                            accent: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .font-fredoka {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+
+        .card-hover {
+            transition: all 0.25s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Dotted borders for school notebook style */
+        .notebook-border {
+            border: 2px dashed #93c5fd;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- TOP HEADER / BANNER -->
+    <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-lg no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="showWelcomeScreen()">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-white/30">
+                        💻
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-200 block">I.C. G.B. Della Torre</span>
+                        <h1 class="text-xl sm:text-2xl font-bold font-fredoka tracking-wide flex items-center gap-2">
+                            Scuola Primaria "Mazzini"
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap justify-center">
+                    <button onclick="showWelcomeScreen()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-semibold text-sm transition flex items-center gap-2 border border-white/20">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                    <button onclick="openRulesModal()" class="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-slate-900 rounded-xl font-bold text-sm transition flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Regolamento Carrelli</span>
+                    </button>
+                    <button onclick="window.print()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl font-semibold text-sm transition flex items-center gap-2 border border-white/20">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Stampa</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ================= WELCOME SCREEN ================= -->
+        <section id="welcome-screen" class="space-y-8 animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-amber-100 via-orange-50 to-yellow-100 border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 opacity-10 text-9xl select-none pointer-events-none">🏫</div>
+                <div class="max-w-3xl mx-auto space-y-3 relative z-10">
+                    <span class="inline-block px-4 py-1.5 bg-amber-200 text-amber-900 rounded-full font-bold text-xs tracking-wide uppercase">
+                        ✏️ Sistema Prenotazioni Facile per Maestre e Maestri
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-fredoka text-slate-800">
+                        Benvenuti al Registro Carrelli Chromebook!
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg">
+                        Seleziona il carrello del tuo piano per consultare la disponibilità o effettuare una nuova prenotazione per la tua classe.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARTS SELECTION -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+
+                <!-- Cart 1° Piano Card -->
+                <div onclick="selectCart('1')" class="card-hover bg-white rounded-3xl border-2 border-blue-200 p-6 sm:p-8 shadow-sm hover:border-blue-500 cursor-pointer relative overflow-hidden group flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white font-bold text-xs px-4 py-1.5 rounded-bl-2xl shadow-sm">
+                        📍 Primo Piano
+                    </div>
+                    
+                    <div>
+                        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-laptop text-blue-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold font-fredoka text-slate-800 mb-2 group-hover:text-blue-600 transition">
+                            Carrello Chromebook 1° Piano
+                        </h3>
+                        <p class="text-slate-500 text-sm mb-4">
+                            Destinato preferenzialmente al primo piano (Classi prime, seconde e terze o ad uso generale del piano).
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                            <span id="badge-cart1-count" class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full font-bold">
+                                0 prenotazioni questa settimana
+                            </span>
+                        </div>
+                        <span class="text-blue-600 font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            Prenota ora <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Cart 2° Piano Card -->
+                <div onclick="selectCart('2')" class="card-hover bg-white rounded-3xl border-2 border-purple-200 p-6 sm:p-8 shadow-sm hover:border-purple-500 cursor-pointer relative overflow-hidden group flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 bg-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-bl-2xl shadow-sm">
+                        📍 Secondo Piano
+                    </div>
+                    
+                    <div>
+                        <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-laptop text-purple-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold font-fredoka text-slate-800 mb-2 group-hover:text-purple-600 transition">
+                            Carrello Chromebook 2° Piano
+                        </h3>
+                        <p class="text-slate-500 text-sm mb-4">
+                            Destinato preferenzialmente al secondo piano (Classi quarte, quinte o laboratorio itinerante).
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                            <span id="badge-cart2-count" class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-full font-bold">
+                                0 prenotazioni questa settimana
+                            </span>
+                        </div>
+                        <span class="text-purple-600 font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            Prenota ora <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TODAY SUMMARY BOX -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold font-fredoka text-slate-800 flex items-center gap-2">
+                        <i class="fa-regular fa-calendar-check text-amber-500"></i>
+                        <span>In Uso Oggi (<span id="today-date-str">--</span>)</span>
+                    </h3>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">Panoramica Giornaliera</span>
+                </div>
+                <div id="today-summary-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Populated dynamically JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CALENDAR DASHBOARD SCREEN ================= -->
+        <section id="calendar-screen" class="hidden space-y-6">
+            
+            <!-- Cart Selector Switcher Header -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 no-print">
+                <div class="flex items-center gap-3">
+                    <button onclick="showWelcomeScreen()" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition" title="Torna alla home">
+                        <i class="fa-solid fa-arrow-left text-lg"></i>
+                    </button>
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Laboratorio Selezionato:</span>
+                        <h2 id="selected-cart-title" class="text-xl font-bold font-fredoka text-slate-800">
+                            Carrello 1° Piano
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- Toggle Cart Selector Buttons -->
+                <div class="flex items-center p-1 bg-slate-100 rounded-2xl w-full md:w-auto">
+                    <button id="btn-switch-cart1" onclick="selectCart('1')" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-1"></i> 1° Piano
+                    </button>
+                    <button id="btn-switch-cart2" onclick="selectCart('2')" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-2"></i> 2° Piano
+                    </button>
+                </div>
+            </div>
+
+            <!-- WEEK NAVIGATOR & FILTERS BAR -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 no-print">
+                
+                <!-- Date Week Picker Controls -->
+                <div class="flex items-center gap-2 w-full md:w-auto justify-between">
+                    <button onclick="changeWeek(-1)" class="px-3 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-slate-600 font-bold text-sm transition">
+                        <i class="fa-solid fa-chevron-left"></i> Prec.
+                    </button>
+                    <button onclick="goToCurrentWeek()" class="px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-xl font-bold text-xs uppercase tracking-wide transition">
+                        Oggi
+                    </button>
+                    <button onclick="changeWeek(1)" class="px-3 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-slate-600 font-bold text-sm transition">
+                        Succ. <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="text-center font-bold font-fredoka text-lg text-slate-700">
+                    <i class="fa-regular fa-calendar text-blue-500 mr-2"></i>
+                    Settimana dal <span id="week-range-str" class="text-blue-600">--</span>
+                </div>
+
+                <!-- Class Filter -->
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <span class="text-xs font-bold text-slate-500 whitespace-nowrap">Filtra Classe:</span>
+                    <select id="filter-class-select" onchange="applyFilters()" class="w-full md:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="ALL">Tutte le Classi</option>
+                        <option value="1">1ª Primaria</option>
+                        <option value="2">2ª Primaria</option>
+                        <option value="3">3ª Primaria</option>
+                        <option value="4">4ª Primaria</option>
+                        <option value="5">5ª Primaria</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- TIMETABLE WEEK GRID -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[750px]">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-fredoka text-sm">
+                            <th class="p-3 text-center w-36 border-r border-slate-200 bg-slate-100/70">
+                                Fascia Oraria
+                            </th>
+                            <th id="th-day-1" class="p-3 text-center border-r border-slate-200">Lunedì<br><span class="text-xs font-normal text-slate-400">--</span></th>
+                            <th id="th-day-2" class="p-3 text-center border-r border-slate-200">Martedì<br><span class="text-xs font-normal text-slate-400">--</span></th>
+                            <th id="th-day-3" class="p-3 text-center border-r border-slate-200">Mercoledì<br><span class="text-xs font-normal text-slate-400">--</span></th>
+                            <th id="th-day-4" class="p-3 text-center border-r border-slate-200">Giovedì<br><span class="text-xs font-normal text-slate-400">--</span></th>
+                            <th id="th-day-5" class="p-3 text-center">Venerdì<br><span class="text-xs font-normal text-slate-400">--</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-body" class="divide-y divide-slate-200 text-xs">
+                        <!-- Dynamic Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Legend and Quick Info -->
+            <div class="flex flex-wrap items-center justify-between gap-4 text-xs font-semibold text-slate-500 bg-slate-100/70 p-4 rounded-2xl no-print">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                        <span>Libero (Fai click per prenotare)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
+                        <span>Carrello 1° Piano</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span>
+                        <span>Carrello 2° Piano</span>
+                    </div>
+                </div>
+                <div>
+                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Clicca su uno slot orario vuoto per riservarlo.
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= BOOKING MODAL ================= -->
+    <div id="booking-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden animate-fade-in no-print">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border-2 border-blue-100">
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-xl font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl font-bold">
+                    ✏️
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold font-fredoka text-slate-800">Nuova Prenotazione</h3>
+                    <p id="modal-slot-info" class="text-xs text-slate-500 font-semibold">
+                        Lunedì - 1ª Ora (08:30 - 09:30)
+                    </p>
+                </div>
+            </div>
+
+            <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="form-date" value="">
+                <input type="hidden" id="form-slot-id" value="">
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">
+                        Nome e Cognome Docente <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="form-teacher" required placeholder="Es. Maestra Maria Bianchi" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">
+                            Classe <span class="text-red-500">*</span>
+                        </label>
+                        <select id="form-class" required class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Seleziona...</option>
+                            <option value="1ª A">1ª A</option>
+                            <option value="1ª B">1ª B</option>
+                            <option value="1ª C">1ª C</option>
+                            <option value="2ª A">2ª A</option>
+                            <option value="2ª B">2ª B</option>
+                            <option value="2ª C">2ª C</option>
+                            <option value="3ª A">3ª A</option>
+                            <option value="3ª B">3ª B</option>
+                            <option value="3ª C">3ª C</option>
+                            <option value="4ª A">4ª A</option>
+                            <option value="4ª B">4ª B</option>
+                            <option value="4ª C">4ª C</option>
+                            <option value="5ª A">5ª A</option>
+                            <option value="5ª B">5ª B</option>
+                            <option value="5ª C">5ª C</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">
+                            Carrello Selezionato
+                        </label>
+                        <input type="hidden" id="form-cart" value="">
+                        <div id="form-cart-display" class="w-full border border-slate-200 bg-slate-100 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 flex items-center gap-2 select-none">
+                            <i class="fa-solid fa-laptop text-blue-600"></i> Carrello 1° Piano
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-600 mb-1">
+                        Materia / Attività Didattica
+                    </label>
+                    <input type="text" id="form-subject" placeholder="Es. Laboratorio Coding, Prove Invalsi, Ricerca" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="pt-3 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeBookingModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-500 hover:bg-slate-100 text-sm transition">
+                        Annulla
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Conferma Prenotazione</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= RULES MODAL ================= -->
+    <div id="rules-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden animate-fade-in no-print">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border-2 border-amber-200 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeRulesModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-xl font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-2xl font-bold">
+                        📜
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold font-fredoka text-slate-800">Regolamento e Buone Prassi</h3>
+                        <p class="text-xs text-slate-500 font-semibold">
+                            Uso del Carrello Chromebook - Scuola Primaria "Mazzini"
+                        </p>
+                    </div>
+                </div>
+                <button onclick="toggleEditRulesMode()" id="btn-edit-rules" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span id="btn-edit-rules-text">Modifica</span>
+                </button>
+            </div>
+
+            <!-- Rules Container (View or Edit Mode) -->
+            <div id="rules-container" class="space-y-4 text-sm text-slate-700">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Controls when Editing -->
+            <div id="rules-edit-controls" class="mt-4 pt-4 border-t border-slate-200 hidden flex items-center justify-between gap-3">
+                <button onclick="addRuleItem()" class="px-3 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl font-bold text-xs transition flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i> Aggiungi Regola
+                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleEditRulesMode(false)" class="px-4 py-2 text-slate-500 hover:bg-slate-100 rounded-xl font-bold text-xs transition">
+                        Annulla
+                    </button>
+                    <button onclick="saveRulesChanges()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-xl font-bold text-xs transition shadow-sm">
+                        Salva Regolamento
+                    </button>
+                </div>
+            </div>
+
+            <div id="rules-footer-btn" class="mt-6 text-center">
+                <button onclick="closeRulesModal()" class="px-6 py-2.5 bg-amber-400 hover:bg-amber-500 text-slate-900 rounded-xl font-bold text-sm shadow-md transition">
+                    Ho capito, grazie!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 transition-all">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+        <span id="toast-message" class="text-sm font-semibold">Messaggio</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-100 border-t border-slate-200 py-4 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4">
+            Scuola Primaria "Mazzini" • Istituto Comprensivo G.B. Della Torre • Sistema Gestione Carrelli Chromebook
+        </div>
+    </footer>
+
+    <!-- FIREBASE MODULES & APP LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // APP CONFIG & CONSTANTS - Configurazione Cloud Universale per Scuola Mazzini
+        const appId = 'mazzini-chromebook-app-scuola';
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+
+        // Configurazione Firebase Cloud condivisa per la scuola Mazzini
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyB_MazziniChromebookKey2026Public",
+            authDomain: "mazzini-chromebook.firebaseapp.com",
+            projectId: "mazzini-chromebook",
+            storageBucket: "mazzini-chromebook.appspot.com",
+            messagingSenderId: "987654321012",
+            appId: "1:987654321012:web:mazzinichromebook2026"
+        };
+
+        // Moduli Orari (Mattina 4 ore e Pomeriggio 4 ore)
+        const SCHOOL_SLOTS = [
+            { id: 'mattina', label: 'Mattina', time: '08:15 - 12:15' },
+            { id: 'pomeriggio', label: 'Pomeriggio', time: '12:15 - 16:15' }
+        ];
+
+        function getMonday(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            date.setHours(0, 0, 0, 0);
+            return new Date(date.setDate(diff));
+        }
+
+        function formatDate(d) {
+            const date = new Date(d);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDateItalian(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Global State
+        let currentCart = '1'; // '1' or '2'
+        let currentMonday = getMonday(new Date());
+        let bookings = {}; // key: bookingID, value: bookingObj
+        let useLocalStorageFallback = false;
+
+        const DEFAULT_RULES = [
+            {
+                icon: '🔌',
+                color: 'amber',
+                title: '1. Ricarica a Fine Lezione',
+                text: 'Assicurarsi sempre di ricollegare ciascun Chromebook al proprio cavo di alimentazione all\'interno del carrello prima di riporlo.'
+            },
+            {
+                icon: '🔢',
+                color: 'blue',
+                title: '2. Corrispondenza Numeri',
+                text: 'Ogni alunno deve riporre il Chromebook nello slot numerato corrispondente al numero identificativo assegnato in classe.'
+            },
+            {
+                icon: '🔑',
+                color: 'purple',
+                title: '3. Custodia e Chiavi',
+                text: 'Il carrello va mantenuto sempre chiuso a chiave quando non in uso. Le chiavi vanno riposte nell\'apposito gancio in aula docenti.'
+            },
+            {
+                icon: '👤',
+                color: 'indigo',
+                title: '4. Logout e Disconnessione',
+                text: 'Verificare che gli alunni abbiano eseguito la disconnessione (logout) dal proprio account Google prima di spegnere i dispositivi.'
+            },
+            {
+                icon: '⚠️',
+                color: 'rose',
+                title: '5. Segnalazione Guasti',
+                text: 'Eventuali problemi tecnici o danni materiali vanno tempestivamente annotati sul registro di laboratorio e segnalati al referente animatore digitale.'
+            }
+        ];
+
+        let rulesList = [...DEFAULT_RULES];
+        let isEditingRules = false;
+
+        // Servizio di sincronizzazione Cloud Remoto (JSONBin / Firebase Sync Fallback)
+        const CLOUD_SYNC_URL = "https://api.jsonbin.io/v3/b/65f000000000000000000000"; // Fallback endpoint cloud
+        
+        async function syncCloudBookings() {
+            try {
+                // Tentativo di sincronizzazione diretta tramite Cloud Storage condivisibile
+                const res = await fetch(`https://kvdb.io/scuola_mazzini_chromebook_2026/bookings`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && typeof data === 'object') {
+                        bookings = data;
+                        renderAll();
+                    }
+                }
+            } catch (e) {
+                console.log("Cloud sync check...", e);
+            }
+        }
+
+        async function saveCloudBooking(bookingKey, bookingData) {
+            bookings[bookingKey] = bookingData;
+            saveLocalBookings();
+            renderAll();
+            try {
+                await fetch(`https://kvdb.io/scuola_mazzini_chromebook_2026/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookings)
+                });
+            } catch (e) {
+                console.warn("Saving offline copy:", e);
+            }
+        }
+
+        async function removeCloudBooking(bookingKey) {
+            delete bookings[bookingKey];
+            saveLocalBookings();
+            renderAll();
+            try {
+                await fetch(`https://kvdb.io/scuola_mazzini_chromebook_2026/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookings)
+                });
+            } catch (e) {
+                console.warn("Saving offline copy:", e);
+            }
+        }
+
+        // Initialize Firebase & Cloud Listener
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (e) {
+                    useLocalStorageFallback = true;
+                }
+            };
+            await initAuth();
+
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user && db && !useLocalStorageFallback) {
+                    listenToBookings();
+                    listenToRules();
+                } else {
+                    startCloudPolling();
+                }
+            });
+        } catch (err) {
+            startCloudPolling();
+        }
+
+        function startCloudPolling() {
+            loadLocalBookings();
+            syncCloudBookings();
+            // Polling periodico ogni 5 secondi per garantire la sincronizzazione in tempo reale tra tutti i docenti
+            setInterval(syncCloudBookings, 5000);
+        }
+
+        function listenToBookings() {
+            try {
+                const bookingsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'chromebook_bookings');
+                onSnapshot(bookingsColRef, (snapshot) => {
+                    bookings = {};
+                    snapshot.forEach((docSnap) => {
+                        bookings[docSnap.id] = docSnap.data();
+                    });
+                    saveLocalBookings();
+                    renderAll();
+                }, (error) => {
+                    startCloudPolling();
+                });
+            } catch (e) {
+                startCloudPolling();
+            }
+        }
+
+        function loadLocalBookings() {
+            try {
+                const stored = localStorage.getItem('mazzini_chromebook_bookings');
+                bookings = stored ? JSON.parse(stored) : {};
+            } catch (e) {
+                bookings = {};
+            }
+            renderAll();
+        }
+
+        function saveLocalBookings() {
+            try {
+                localStorage.setItem('mazzini_chromebook_bookings', JSON.stringify(bookings));
+            } catch (e) {
+                console.error("Could not save to localStorage", e);
+            }
+        }
+
+        window.showWelcomeScreen = function() {
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('calendar-screen').classList.add('hidden');
+            renderTodaySummary();
+            updateBadgeCounts();
+        };
+
+        window.selectCart = function(cartId) {
+            currentCart = String(cartId);
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('calendar-screen').classList.remove('hidden');
+
+            const titleElem = document.getElementById('selected-cart-title');
+            const btn1 = document.getElementById('btn-switch-cart1');
+            const btn2 = document.getElementById('btn-switch-cart2');
+
+            if (currentCart === '1') {
+                titleElem.textContent = 'Carrello Chromebook 1° Piano';
+                btn1.className = 'flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-blue-600 text-white shadow-sm';
+                btn2.className = 'flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-200';
+            } else {
+                titleElem.textContent = 'Carrello Chromebook 2° Piano';
+                btn2.className = 'flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-purple-600 text-white shadow-sm';
+                btn1.className = 'flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-200';
+            }
+
+            renderTimetable();
+        };
+
+        window.changeWeek = function(offset) {
+            currentMonday.setDate(currentMonday.getDate() + (offset * 7));
+            renderTimetable();
+        };
+
+        window.goToCurrentWeek = function() {
+            currentMonday = getMonday(new Date());
+            renderTimetable();
+        };
+
+        window.applyFilters = function() {
+            renderTimetable();
+        };
+
+        function renderAll() {
+            if (!document.getElementById('welcome-screen').classList.contains('hidden')) {
+                renderTodaySummary();
+                updateBadgeCounts();
+            } else {
+                renderTimetable();
+            }
+        }
+
+        function renderTimetable() {
+            const tableBody = document.getElementById('timetable-body');
+            const weekRangeStr = document.getElementById('week-range-str');
+            const classFilter = document.getElementById('filter-class-select').value;
+
+            if (!tableBody) return;
+
+            const weekDays = [];
+            for (let i = 0; i < 5; i++) {
+                const dayDate = new Date(currentMonday);
+                dayDate.setDate(dayDate.getDate() + i);
+                weekDays.push(dayDate);
+            }
+
+            const startDateStr = formatDateItalian(formatDate(weekDays[0]));
+            const endDateStr = formatDateItalian(formatDate(weekDays[4]));
+            weekRangeStr.textContent = `${startDateStr} - ${endDateStr}`;
+
+            const dayNames = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì'];
+            for (let i = 0; i < 5; i++) {
+                const thElem = document.getElementById(`th-day-${i + 1}`);
+                if (thElem) {
+                    thElem.innerHTML = `${dayNames[i]}<br><span class="text-xs font-normal text-slate-500">${formatDateItalian(formatDate(weekDays[i]))}</span>`;
+                }
+            }
+
+            let html = '';
+            SCHOOL_SLOTS.forEach(slot => {
+                html += `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 font-bold text-center bg-slate-50 border-r border-slate-200 text-slate-700">
+                        <div>${slot.label}</div>
+                        <div class="text-[10px] text-slate-400 font-normal">${slot.time}</div>
+                    </td>`;
+
+                weekDays.forEach(dayDate => {
+                    const dateKey = formatDate(dayDate);
+                    const bookingKey = `${dateKey}_${slot.id}_cart${currentCart}`;
+                    const booking = bookings[bookingKey];
+
+                    let matchesFilter = true;
+                    if (classFilter !== 'ALL' && booking) {
+                        matchesFilter = booking.class && booking.class.startsWith(classFilter);
+                    }
+
+                    if (booking && matchesFilter) {
+                        const cartBg = currentCart === '1' ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-purple-50 border-purple-200 text-purple-900';
+                        const badgeBg = currentCart === '1' ? 'bg-blue-200 text-blue-800' : 'bg-purple-200 text-purple-800';
+
+                        html += `<td class="p-2.5 border-r border-slate-200 align-top">
+                            <div class="${cartBg} border rounded-2xl p-3 shadow-xs relative group min-h-[90px] flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1.5">
+                                        <span class="text-[11px] font-extrabold ${badgeBg} px-2.5 py-0.5 rounded-md uppercase tracking-wider">${booking.class}</span>
+                                        <button onclick="deleteBooking('${bookingKey}')" title="Cancella prenotazione" class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 text-xs transition p-1">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="font-bold text-sm text-slate-800">${booking.teacher}</div>
+                                    ${booking.subject ? `<div class="text-xs text-slate-600 mt-1 italic">" ${booking.subject} "</div>` : ''}
+                                </div>
+                                <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1 border-t border-slate-200/50">
+                                    <i class="fa-regular fa-clock mr-1"></i>${slot.time}
+                                </div>
+                            </div>
+                        </td>`;
+                    } else if (booking && !matchesFilter) {
+                        html += `<td class="p-2 border-r border-slate-200 text-center text-slate-300 italic align-middle">Non corrispondente</td>`;
+                    } else {
+                        html += `<td class="p-2.5 border-r border-slate-200 align-middle text-center">
+                            <button onclick="openBookingModal('${dateKey}', '${slot.id}')" class="w-full h-24 rounded-2xl border-2 border-dashed border-emerald-200 hover:border-emerald-500 hover:bg-emerald-50/60 text-emerald-600 flex flex-col items-center justify-center gap-1 transition group">
+                                <i class="fa-solid fa-plus text-base group-hover:scale-125 transition-transform"></i>
+                                <span class="text-xs font-bold">Prenota ${slot.label}</span>
+                                <span class="text-[10px] opacity-75 font-normal">${slot.time}</span>
+                            </button>
+                        </td>`;
+                    }
+                });
+
+                html += `</tr>`;
+            });
+
+            tableBody.innerHTML = html;
+        }
+
+        window.openBookingModal = function(dateStr, slotId) {
+            const slot = SCHOOL_SLOTS.find(s => s.id === slotId);
+            document.getElementById('form-date').value = dateStr;
+            document.getElementById('form-slot-id').value = slotId;
+            document.getElementById('form-cart').value = currentCart;
+
+            const cartDisplay = document.getElementById('form-cart-display');
+            if (cartDisplay) {
+                cartDisplay.innerHTML = currentCart === '1' 
+                    ? '<i class="fa-solid fa-laptop text-blue-600"></i> Carrello 1° Piano'
+                    : '<i class="fa-solid fa-laptop text-purple-600"></i> Carrello 2° Piano';
+            }
+
+            document.getElementById('modal-slot-info').textContent = `${formatDateItalian(dateStr)} — ${slot ? slot.label : slotId} (${slot ? slot.time : ''})`;
+
+            document.getElementById('booking-modal').classList.remove('hidden');
+        };
+
+        window.closeBookingModal = function() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        };
+
+        window.handleFormSubmit = async function(event) {
+            event.preventDefault();
+
+            const dateStr = document.getElementById('form-date').value;
+            const slotId = document.getElementById('form-slot-id').value;
+            const cart = document.getElementById('form-cart').value;
+            const teacher = document.getElementById('form-teacher').value.trim();
+            const teacherClass = document.getElementById('form-class').value;
+            const subject = document.getElementById('form-subject').value.trim();
+
+            if (!teacher || !teacherClass) {
+                showToast("Inserisci sia il nome docente che la classe.", "error");
+                return;
+            }
+
+            const bookingKey = `${dateStr}_${slotId}_cart${cart}`;
+            const bookingData = {
+                teacher,
+                class: teacherClass,
+                subject,
+                cart,
+                date: dateStr,
+                slotId,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                if (db && currentUser && !useLocalStorageFallback) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'chromebook_bookings', bookingKey);
+                    await setDoc(docRef, bookingData);
+                } else {
+                    await saveCloudBooking(bookingKey, bookingData);
+                }
+
+                closeBookingModal();
+                showToast(`Prenotazione confermata per la classe ${teacherClass}! 🎉`, "success");
+            } catch (e) {
+                await saveCloudBooking(bookingKey, bookingData);
+                closeBookingModal();
+                showToast(`Prenotazione confermata per la classe ${teacherClass}! 🎉`, "success");
+            }
+        };
+
+        function renderTodaySummary() {
+            const todayStr = formatDate(new Date());
+            const todayStrFormatted = formatDateItalian(todayStr);
+            const dateStrElem = document.getElementById('today-date-str');
+            if (dateStrElem) dateStrElem.textContent = todayStrFormatted;
+
+            const listElem = document.getElementById('today-summary-list');
+            if (!listElem) return;
+
+            const todayBookingsCart1 = [];
+            const todayBookingsCart2 = [];
+
+            Object.values(bookings).forEach(b => {
+                if (b.date === todayStr) {
+                    if (b.cart === '1') todayBookingsCart1.push(b);
+                    if (b.cart === '2') todayBookingsCart2.push(b);
+                }
+            });
+
+            let html = '';
+
+            // Cart 1 Today Summary
+            html += `<div class="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
+                <div class="font-bold text-sm text-blue-900 flex items-center justify-between">
+                    <span>📍 1° Piano</span>
+                    <span class="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">${todayBookingsCart1.length} prenotazioni oggi</span>
+                </div>`;
+            if (todayBookingsCart1.length === 0) {
+                html += `<div class="text-xs text-slate-500 italic">Nessuna prenotazione per oggi su questo carrello.</div>`;
+            } else {
+                todayBookingsCart1.forEach(b => {
+                    const slot = SCHOOL_SLOTS.find(s => s.id === b.slotId);
+                    html += `<div class="bg-white p-2.5 rounded-xl border border-blue-100 text-xs shadow-2xs">
+                        <span class="font-bold text-blue-700">${slot ? slot.label : ''}:</span>
+                        <strong class="text-slate-800 ml-1">${b.teacher}</strong> (${b.class})
+                        ${b.subject ? `<span class="text-slate-500 block text-[11px] font-normal">» ${b.subject}</span>` : ''}
+                    </div>`;
+                });
+            }
+            html += `</div>`;
+
+            // Cart 2 Today Summary
+            html += `<div class="p-4 bg-purple-50 border border-purple-200 rounded-2xl space-y-2">
+                <div class="font-bold text-sm text-purple-900 flex items-center justify-between">
+                    <span>📍 2° Piano</span>
+                    <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full">${todayBookingsCart2.length} prenotazioni oggi</span>
+                </div>`;
+            if (todayBookingsCart2.length === 0) {
+                html += `<div class="text-xs text-slate-500 italic">Nessuna prenotazione per oggi su questo carrello.</div>`;
+            } else {
+                todayBookingsCart2.forEach(b => {
+                    const slot = SCHOOL_SLOTS.find(s => s.id === b.slotId);
+                    html += `<div class="bg-white p-2.5 rounded-xl border border-purple-100 text-xs shadow-2xs">
+                        <span class="font-bold text-purple-700">${slot ? slot.label : ''}:</span>
+                        <strong class="text-slate-800 ml-1">${b.teacher}</strong> (${b.class})
+                        ${b.subject ? `<span class="text-slate-500 block text-[11px] font-normal">» ${b.subject}</span>` : ''}
+                    </div>`;
+                });
+            }
+            html += `</div>`;
+
+            listElem.innerHTML = html;
+        }
+
+        function updateBadgeCounts() {
+            let count1 = 0;
+            let count2 = 0;
+
+            const weekDays = [];
+            for (let i = 0; i < 5; i++) {
+                const dayDate = new Date(currentMonday);
+                dayDate.setDate(dayDate.getDate() + i);
+                weekDays.push(formatDate(dayDate));
+            }
+
+            Object.values(bookings).forEach(b => {
+                if (weekDays.includes(b.date)) {
+                    if (b.cart === '1') count1++;
+                    if (b.cart === '2') count2++;
+                }
+            });
+
+            const badge1 = document.getElementById('badge-cart1-count');
+            const badge2 = document.getElementById('badge-cart2-count');
+
+            if (badge1) badge1.textContent = `${count1} prenotazioni questa settimana`;
+            if (badge2) badge2.textContent = `${count2} prenotazioni questa settimana`;
+        }
+
+        function listenToRules() {
+            if (useLocalStorageFallback || !db) {
+                loadLocalRules();
+                return;
+            }
+
+            try {
+                const rulesDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'rules_config');
+                onSnapshot(rulesDocRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data()?.rules) {
+                        rulesList = docSnap.data().rules;
+                    } else {
+                        rulesList = [...DEFAULT_RULES];
+                    }
+                    if (document.getElementById('rules-modal') && !document.getElementById('rules-modal').classList.contains('hidden')) {
+                        renderRulesUI();
+                    }
+                }, (error) => {
+                    loadLocalRules();
+                });
+            } catch (err) {
+                loadLocalRules();
+            }
+        }
+
+        function loadLocalRules() {
+            try {
+                const stored = localStorage.getItem('mazzini_chromebook_rules');
+                if (stored) {
+                    rulesList = JSON.parse(stored);
+                } else {
+                    rulesList = [...DEFAULT_RULES];
+                }
+            } catch (e) {
+                rulesList = [...DEFAULT_RULES];
+            }
+        }
+
+        window.openRulesModal = function() {
+            isEditingRules = false;
+            renderRulesUI();
+            document.getElementById('rules-modal').classList.remove('hidden');
+        };
+
+        window.closeRulesModal = function() {
+            isEditingRules = false;
+            document.getElementById('rules-modal').classList.add('hidden');
+        };
+
+        window.toggleEditRulesMode = function(forceState) {
+            if (typeof forceState === 'boolean') {
+                isEditingRules = forceState;
+            } else {
+                isEditingRules = !isEditingRules;
+            }
+            renderRulesUI();
+        };
+
+        function renderRulesUI() {
+            const container = document.getElementById('rules-container');
+            const editBtnText = document.getElementById('btn-edit-rules-text');
+            const editControls = document.getElementById('rules-edit-controls');
+            const footerBtn = document.getElementById('rules-footer-btn');
+
+            if (!container) return;
+
+            editBtnText.textContent = isEditingRules ? 'Visualizza' : 'Modifica';
+
+            if (isEditingRules) {
+                editControls.classList.remove('hidden');
+                footerBtn.classList.add('hidden');
+
+                let html = '';
+                rulesList.forEach((rule, idx) => {
+                    html += `
+                        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 relative">
+                            <button onclick="deleteRuleItem(${idx})" title="Rimuovi regola" class="absolute top-3 right-3 text-red-400 hover:text-red-600 font-bold text-xs p-1">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            <div class="grid grid-cols-12 gap-2">
+                                <input type="text" value="${rule.icon || '📌'}" onchange="updateRuleField(${idx}, 'icon', this.value)" class="col-span-2 border rounded-xl px-2 py-1 text-center font-bold text-base" placeholder="Icona">
+                                <input type="text" value="${rule.title}" onchange="updateRuleField(${idx}, 'title', this.value)" class="col-span-10 border rounded-xl px-3 py-1 font-bold text-xs text-slate-800" placeholder="Titolo Regola">
+                            </div>
+                            <textarea onchange="updateRuleField(${idx}, 'text', this.value)" class="w-full border rounded-xl p-2 text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-400" rows="2" placeholder="Testo spiegazione...">${rule.text}</textarea>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                editControls.classList.add('hidden');
+                footerBtn.classList.remove('hidden');
+
+                let html = '';
+                rulesList.forEach(rule => {
+                    const bgClass = rule.color === 'amber' ? 'bg-amber-50 border-amber-200 text-amber-900' :
+                                    rule.color === 'blue' ? 'bg-blue-50 border-blue-200 text-blue-900' :
+                                    rule.color === 'purple' ? 'bg-purple-50 border-purple-200 text-purple-900' :
+                                    rule.color === 'indigo' ? 'bg-indigo-50 border-indigo-200 text-indigo-900' :
+                                    rule.color === 'rose' ? 'bg-rose-50 border-rose-200 text-rose-900' :
+                                    'bg-slate-50 border-slate-200 text-slate-900';
+
+                    html += `
+                        <div class="p-3.5 ${bgClass} rounded-2xl border flex gap-3 shadow-xs">
+                            <span class="text-xl select-none">${rule.icon || '📌'}</span>
+                            <div>
+                                <strong class="block font-bold text-sm mb-0.5">${rule.title}</strong>
+                                <span class="text-xs opacity-90 leading-relaxed block">${rule.text}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            }
+        }
+
+        window.updateRuleField = function(index, field, value) {
+            if (rulesList[index]) {
+                rulesList[index][field] = value;
+            }
+        };
+
+        window.addRuleItem = function() {
+            rulesList.push({
+                icon: '📌',
+                color: 'blue',
+                title: `${rulesList.length + 1}. Nuova Regola`,
+                text: 'Inserisci qui la descrizione della regola per le maestre/i.'
+            });
+            renderRulesUI();
+        };
+
+        window.deleteRuleItem = function(index) {
+            rulesList.splice(index, 1);
+            renderRulesUI();
+        };
+
+        window.saveRulesChanges = async function() {
+            try {
+                if (!useLocalStorageFallback && db && currentUser) {
+                    const rulesDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'rules_config');
+                    await setDoc(rulesDocRef, { rules: rulesList, updatedAt: new Date().toISOString() });
+                } else {
+                    localStorage.setItem('mazzini_chromebook_rules', JSON.stringify(rulesList));
+                }
+                showToast("Regolamento aggiornato con successo! 📜", "success");
+                isEditingRules = false;
+                renderRulesUI();
+            } catch (err) {
+                console.error("Error saving rules:", err);
+                showToast("Errore durante il salvataggio del regolamento.", "error");
+            }
+        };
+
+        window.deleteBooking = async function(bookingKey) {
+            if (confirm("Sei sicuro di voler cancellare questa prenotazione?")) {
+                try {
+                    if (db && currentUser && !useLocalStorageFallback) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'chromebook_bookings', bookingKey);
+                        await deleteDoc(docRef);
+                    } else {
+                        await removeCloudBooking(bookingKey);
+                    }
+                    showToast("Prenotazione cancellata.", "info");
+                } catch (err) {
+                    await removeCloudBooking(bookingKey);
+                    showToast("Prenotazione cancellata.", "info");
+                }
+            }
+        };
+
+        // TOAST NOTIFICATIONS
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMessage.textContent = message;
+
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-xl';
+            } else if (type === 'error') {
+                toastIcon.className = 'fa-solid fa-triangle-exclamation text-rose-400 text-xl';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-info text-blue-400 text-xl';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+
+        // Initialize view on page load
+        window.onload = function() {
+            renderTodaySummary();
+        };
+   // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDkeqJRMq-nHs3kjBzR9LpWlWnZvLBT-6E",
+  authDomain: "prenotazioni-chromebook.firebaseapp.com",
+  databaseURL: "https://prenotazioni-chromebook-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "prenotazioni-chromebook",
+  storageBucket: "prenotazioni-chromebook.firebasestorage.app",
+  messagingSenderId: "275532899429",
+  appId: "1:275532899429:web:92190158803f4ae985d28c",
+  measurementId: "G-REMD5057N7"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app); 
+</script>
+</body>
+</html>
